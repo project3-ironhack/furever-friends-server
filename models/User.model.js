@@ -18,6 +18,18 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Name is required."],
     },
+    telephone: {
+      type: Number,
+    },
+    city: {
+      type: String
+    },
+
+    type: {
+      type: String,
+      enum: ['adopter', 'association'],
+      required: true
+    },
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
