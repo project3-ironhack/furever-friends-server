@@ -4,7 +4,6 @@ const User = require("./User.model")
 const associationSchema = new Schema({
     website: {
         type: String,
-        required: true,
     },
     associationType: {
         type: [String],

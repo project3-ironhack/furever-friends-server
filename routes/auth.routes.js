@@ -9,6 +9,8 @@ const jwt = require("jsonwebtoken");
 
 // Require the User model in order to interact with the database
 const User = require("../models/User.model");
+const Adopter = require("../models/Adopter.model");
+const Association = require("../models/Association.model");
 
 // Require necessary (isAuthenticated) middleware in order to control access to specific routes
 const { isAuthenticated } = require("../middleware/jwt.middleware.js");
@@ -18,7 +20,16 @@ const saltRounds = 10;
 
 // POST /auth/signup  - Creates a new user in the database
 router.post("/signup", (req, res, next) => {
-  const { email, password, name } = req.body;
+  const {
+    email,
+    password, 
+    name,
+    telephone,
+    city,
+    type
+  } = req.body;
+  const { home, yardAccess, hasKids, hasPets } = req.body;
+  const {website, associationType, image} = req.body;
 
   // Check if email or password or name are provided as empty strings
   if (email === "" || password === "" || name === "") {
@@ -56,13 +67,36 @@ router.post("/signup", (req, res, next) => {
       const salt = bcrypt.genSaltSync(saltRounds);
       const hashedPassword = bcrypt.hashSync(password, salt);
 
+      const newUser = {
+        email,
+        password: hashedPassword,
+        name,
+        telephone,
+        city,
+        type
+      };
+
+      const adopterKind = { home, yardAccess, hasKids, hasPets };
+      const associationKind = { website, associationType, image};
+    
+      const newAdopter = {...newUser, ...adopterKind };
+      const newAssociation = {...newUser, associationKind};
+
       // Create the new user in the database
       // We return a pending promise, which allows us to chain another `then`
-      return User.create({ email, password: hashedPassword, name });
+      if(type === 'adopter'){
+        return Adopter.create(newAdopter)
+      }
+  
+
+      if(type === 'association'){
+        return Association.create(newAssociation)
+      }
     })
     .then((createdUser) => {
       // Deconstruct the newly created user object to omit the password
       // We should never expose passwords publicly
+      console.log(createdUser)
       const { email, name, _id } = createdUser;
 
       // Create a new object that doesn't expose the password
