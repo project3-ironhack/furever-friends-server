@@ -56,6 +56,11 @@ const petSchema = new Schema (
         adoptionWith: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Association",
+        },
+        typeOfPet: {
+            type: [String],
+            enum: ["cat", "dog"],
+            required: [true, "please specify the kind of pet"]
         }
     }
 )

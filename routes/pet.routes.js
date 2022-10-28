@@ -44,7 +44,8 @@ router.post('/pets', (req, res, next) => {
         isNeutered, 
         isVaccinated, 
         image, 
-        adoptionWith
+        adoptionWith,
+        typeOfPet
     };
 
     const catType = { catRace };
@@ -53,7 +54,7 @@ router.post('/pets', (req, res, next) => {
     const newCat = {...newPet, ...catType };
     const newDog = {...newPet, ...dogType };
 
-    if( typeOfPet === 'Dog'){
+    if( typeOfPet === 'dog'){
         Dog.create(newDog)
         .then(response => res.json(response))
         .catch(err => {
@@ -67,7 +68,7 @@ router.post('/pets', (req, res, next) => {
     }   
   
  
-    if ( typeOfPet === 'Cat') {
+    if ( typeOfPet === 'cat') {
         Cat.create(newCat)
         .then(response => res.json(response))
         .catch(err => {
