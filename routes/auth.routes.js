@@ -80,7 +80,7 @@ router.post("/signup", (req, res, next) => {
       const associationKind = { website, associationType, image};
     
       const newAdopter = {...newUser, ...adopterKind };
-      const newAssociation = {...newUser, associationKind};
+      const newAssociation = {...newUser, ...associationKind};
 
       // Create the new user in the database
       // We return a pending promise, which allows us to chain another `then`
