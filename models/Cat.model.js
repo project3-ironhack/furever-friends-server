@@ -3,7 +3,7 @@ const Pet = require("./Pet.model")
 
 const catSchema = new Schema({
     catRace: {
-        type: [String],
+        type: String,
         enum: [
             "Abyssinian",
             "Bengal",

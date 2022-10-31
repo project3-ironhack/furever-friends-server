@@ -3,7 +3,7 @@ const Pet = require("./Pet.model")
 
 const dogSchema = new Schema({
     dogRace: {
-        type: [String],
+        type: String,
         enum: [
             "Affenpinscher",
             "Afghan Hound",
@@ -82,7 +82,7 @@ const dogSchema = new Schema({
         default: "Unknown",
     },
     size: {
-        type: [String],
+        type: String,
         enum: ["tiny", "small", "medium", "large", "extra-large"],
     }
 })

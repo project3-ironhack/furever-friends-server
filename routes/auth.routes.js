@@ -108,6 +108,21 @@ router.post("/signup", (req, res, next) => {
     .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
 });
 
+// Get list of pet array info from model
+const enums = [
+  ['/signup/types', User, 'type'],
+  ['/signup/associationtype', Association, 'associationType'],
+  ['/signup/home', Adopter, 'home'],
+  ['/signup/haspets', Adopter, 'hasPets'],
+]
+
+for (const array of enums) {
+  let [path, model, key] = array;
+  router.get(path, (req, res) => {
+      res.json(model.schema.path(key).enumValues)
+  });
+}
+
 // POST  /auth/login - Verifies email and password and returns a JWT
 router.post("/login", (req, res, next) => {
   const { email, password } = req.body;

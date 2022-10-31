@@ -1,7 +1,7 @@
 const router =  require("express").Router();
 const mongoose = require('mongoose');
 
-const  Pet = require('../models/Pet.model');
+const Pet = require('../models/Pet.model');
 const Dog = require('../models/Dog.model');
 const Cat = require('../models/Cat.model');
 const Association = require('../models/Association.model'); 
@@ -96,6 +96,24 @@ router.get('/pets', (req, res, next) => {
     });
 });
 
+// Get list of pet array info from model
+const enums = [
+    ['/pets/agetype', Pet, 'ageType'],
+    ['/pets/petfriendly', Pet, 'petFriendly'],
+    ['/pets/kidfriendly', Pet, 'kidFriendly'],
+    ['/pets/furlength', Pet, 'furLength'],
+    ['/pets/typeofpet', Pet, 'typeOfPet'],
+    ['/cats/breeds', Cat, 'catRace'],
+    ['/dogs/breeds', Dog, 'dogRace'],
+    ['/dogs/sizes', Dog, 'size'],
+]
+
+for (const array of enums) {
+    let [path, model, key] = array;
+    router.get(path, (req, res) => {
+        res.json(model.schema.path(key).enumValues)
+    });
+}
 
 // Retrieve a specific pet by id 
 

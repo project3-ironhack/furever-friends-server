@@ -7,7 +7,7 @@ const associationSchema = new Schema({
         required: [true, "website is required"],
     },
     associationType: {
-        type: [String],
+        type: String,
         enum: ["rescue group", "shelter", "city pound"]
     },
     image: {

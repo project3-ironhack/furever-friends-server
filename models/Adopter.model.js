@@ -3,7 +3,7 @@ const User = require("./User.model")
 
 const adopterSchema = new Schema({
     home: {
-        type: [String],
+        type: String,
         enum: ["apartment", "house", "other"]
     },
     yardAccess: {
@@ -15,7 +15,7 @@ const adopterSchema = new Schema({
         default: false,
     },
     hasPets: {
-        type: [String],
+        type: String,
         enum: ["no", "cat", "dog", "other"]
     }
 })

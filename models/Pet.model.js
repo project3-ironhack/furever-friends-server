@@ -10,7 +10,7 @@ const petSchema = new Schema (
             type: Date,
         },
         ageType: {
-            type: [String],
+            type: String,
             enum: ["young", "adult", "senior"],
             required: true,
         },
@@ -24,17 +24,17 @@ const petSchema = new Schema (
             required: true,
         },
         petFriendly: {
-            type: [String],
+            type: String,
             enum: ["no other pets", "good with dogs", "good with cats", "good with other", "unknown"],
             default: "unknown",
         },
         kidFriendly: {
-            type: [String],
+            type: String,
             enum: ["good with kids", "not good with kids", "unknown"],
             default: "unknown",
         },
         furLength: {
-            type: [String],
+            type: String,
             enum: ["furless", "short", "medium", "long"],
             default: "short",
         },
@@ -58,7 +58,7 @@ const petSchema = new Schema (
             ref: "Association",
         },
         typeOfPet: {
-            type: [String],
+            type: String,
             enum: ["cat", "dog"],
             required: [true, "please specify the kind of pet"]
         }
