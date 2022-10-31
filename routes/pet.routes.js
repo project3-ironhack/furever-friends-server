@@ -14,7 +14,8 @@ const { isAuthenticated } = require('../middleware/jwt.middleware');
 router.post('/pets', (req, res, next) => {
     const { petName, 
         birthday, 
-        ageType, 
+        ageType,
+        sex,
         weight, 
         description, 
         petFriendly, 
@@ -34,7 +35,8 @@ router.post('/pets', (req, res, next) => {
     const newPet = {
         petName,
         birthday, 
-        ageType, 
+        ageType,
+        sex,
         weight, 
         description, 
         petFriendly, 
@@ -99,6 +101,7 @@ router.get('/pets', (req, res, next) => {
 // Get list of pet array info from model
 const enums = [
     ['/pets/agetype', Pet, 'ageType'],
+    ['/pets/sex', Pet, 'sex'],
     ['/pets/petfriendly', Pet, 'petFriendly'],
     ['/pets/kidfriendly', Pet, 'kidFriendly'],
     ['/pets/furlength', Pet, 'furLength'],

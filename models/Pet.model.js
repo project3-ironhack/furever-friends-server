@@ -19,6 +19,11 @@ const petSchema = new Schema (
             min: 0,
             max: 100,
         },
+        sex: {
+            type: String,
+            enum: ["female", "male"],
+            required: [true, "please choose pet sex"],
+        },
         description: {
             type: String,
             required: true,
