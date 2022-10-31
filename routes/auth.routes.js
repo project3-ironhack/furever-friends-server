@@ -108,7 +108,7 @@ router.post("/signup", (req, res, next) => {
     .catch((err) => next(err)); // In this case, we send error handling to the error handling middleware.
 });
 
-// Get list of pet array info from model
+// Get list of user info from model
 const enums = [
   ['/signup/types', User, 'type'],
   ['/signup/associationtype', Association, 'associationType'],
