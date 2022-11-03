@@ -8,9 +8,6 @@ const Cat = require('../models/Cat.model');
 
 const fileUploader = require('../config/cloudinary.config');
 
-
-const fileUploader = require('../config/cloudinary.config');
-
 const { isAuthenticated } = require('../middleware/jwt.middleware');
 
 // Route to receive cloudinary upload => Route that receives the
