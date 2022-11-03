@@ -6,12 +6,21 @@ const Dog = require('../models/Dog.model');
 const Cat = require('../models/Cat.model');
 const Association = require('../models/Association.model'); 
 
+
+const fileUploader = require('../config/cloudinary.config');
+
 const { isAuthenticated } = require('../middleware/jwt.middleware');
+
+
+
 
 
 //Create a new pet 
 
-router.post('/pets', (req, res, next) => {
+router.post('/pets', fileUploader.single('image'), (req, res, next) => {
+
+    console.log(req.body); 
+
     const { petName, 
         birthday, 
         ageType,
@@ -24,10 +33,12 @@ router.post('/pets', (req, res, next) => {
         location, 
         isNeutered, 
         isVaccinated, 
-        image, 
         adoptionWith,
         typeOfPet
     } = req.body;
+    
+
+    
 
     const { catRace } = req.body;
     const { dogRace, size } = req.body;
@@ -45,10 +56,12 @@ router.post('/pets', (req, res, next) => {
         location, 
         isNeutered, 
         isVaccinated, 
-        image, 
+        image:req.file?.path,
         adoptionWith,
         typeOfPet
     };
+
+    console.log(newPet);
 
     const catType = { catRace };
     const dogType = {dogRace, size};
