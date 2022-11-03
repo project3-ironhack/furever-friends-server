@@ -29,7 +29,7 @@ router.post("/signup", (req, res, next) => {
     type
   } = req.body;
   const { home, yardAccess, hasKids, hasPets } = req.body;
-  const {website, associationType, image} = req.body;
+  const { website, associationType, image } = req.body;
 
   // Check if email or password or name are provided as empty strings
   if (email === "" || password === "" || name === "") {
@@ -77,10 +77,10 @@ router.post("/signup", (req, res, next) => {
       };
 
       const adopterKind = { home, yardAccess, hasKids, hasPets };
-      const associationKind = { website, associationType, image};
+      const associationKind = { website, associationType, image };
     
-      const newAdopter = {...newUser, ...adopterKind };
-      const newAssociation = {...newUser, ...associationKind};
+      const newAdopter = { ...newUser, ...adopterKind }
+      const newAssociation = { ...newUser, ...associationKind };
 
       // Create the new user in the database
       // We return a pending promise, which allows us to chain another `then`
