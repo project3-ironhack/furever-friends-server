@@ -1,26 +1,31 @@
 const router =  require("express").Router();
+const express = require('express');
 const mongoose = require('mongoose');
 
 const Pet = require('../models/Pet.model');
 const Dog = require('../models/Dog.model');
 const Cat = require('../models/Cat.model');
-const Association = require('../models/Association.model'); 
+
+const fileUploader = require('../config/cloudinary.config');
 
 
 const fileUploader = require('../config/cloudinary.config');
 
 const { isAuthenticated } = require('../middleware/jwt.middleware');
 
-
-
-
+// Route to receive cloudinary upload => Route that receives the
+// image, sends it to Cloudinary via the fileUploader and returns
+// the image URL
+router.post('/upload', fileUploader.single('image'), (req, res, next) => {
+    if (!req.file) {
+        next(new Error("no file uploaded"));
+        return;
+    }
+    res.json({ fileUrl: req.file.path });
+});
 
 //Create a new pet 
-
-router.post('/pets', fileUploader.single('image'), (req, res, next) => {
-
-    console.log(req.body); 
-
+router.post('/pets', isAuthenticated, (req, res, next) => {
     const { petName, 
         birthday, 
         ageType,
@@ -81,7 +86,6 @@ router.post('/pets', fileUploader.single('image'), (req, res, next) => {
         });
          
     }   
-  
  
     if ( typeOfPet === 'cat') {
         Cat.create(newCat)
@@ -93,13 +97,10 @@ router.post('/pets', fileUploader.single('image'), (req, res, next) => {
                 error: err
             })
         });
-    
     }
-    
 });
 
 // Get list of pets
-
 router.get('/pets', (req, res, next) => {
     Pet.find()
     .then(allPets => {
@@ -132,7 +133,6 @@ for (const array of enums) {
 }
 
 // Retrieve a specific pet by id 
-
 router.get('/pets/:petId', (req, res, next) =>{
     const { petId } = req.params;
 
@@ -150,34 +150,51 @@ router.get('/pets/:petId', (req, res, next) =>{
                 error: err
             })
         });
-
 });
 
-
 // Update a specific Pet by id
-
-router.put('/pets/:petId',  (req, res, next) => {
+router.put('/pets/:petId', isAuthenticated, (req, res, next) => {
     const { petId } = req.params;
-
+    const { typeOfPet } = req.body;
+    console.log(req.body)
     if (!mongoose.Types.ObjectId.isValid(petId)) {
         res.status(400).json({ message: 'Specified id is not valid' });
         return;
     }
 
-    Pet.findByIdAndUpdate(petId, req.body, { new: true })
-        .then((updatedPet) => res.json(updatedPet))
+    if ( typeOfPet === 'cat'){
+    Cat.findByIdAndUpdate(petId, req.body, { new: true })
+        .then((updatedPet) => {res.json(updatedPet)
+        console.log(updatedPet)
+        })
         .catch(err => {
-            console.log("error updating pet...", err);
+            console.log("error updating cat...", err);
             res.status(500).json({
-                message: "error updating pet...",
+                message: "error updating cat...",
                 error: err
             })
         });
+    }
+
+    if ( typeOfPet === 'dog'){
+        Dog.findByIdAndUpdate(petId, req.body, { new: true })
+            .then((updatedPet) => {res.json(updatedPet)
+            console.log(updatedPet)
+            })
+            .catch(err => {
+                console.log("error updating dog...", err);
+                res.status(500).json({
+                    message: "error updating dog...",
+                    error: err
+                })
+            });
+        }
+
 });
 
 
 // Delete a specific pet by id
-router.delete('/pets/:petId', (req, res, next) => {
+router.delete('/pets/:petId', isAuthenticated, (req, res, next) => {
     const { petId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(petId)) {
