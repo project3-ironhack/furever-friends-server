@@ -252,19 +252,18 @@ router.delete('/signup/:userId', (req, res, next) => {
   const { userId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(userId)) {
-      res.status(400).json({ message: 'Specified id is not valid' });
-      return;
+    res.status(400).json({ message: 'Specified id is not valid' });
+    return;
   }
 
   User.findByIdAndRemove(userId)
-      .then(() => res.json({ message: `Pet with ${userId} is removed successfully.` }))
-      .catch(err => {
-          console.log("error deleting user...", err);
-          res.status(500).json({
-              message: "error deleting user...",
-              error: err
-          })
-      });
+    .then(() => {
+      res.json({ message: `Pet with ${userId} is removed successfully.` })
+    })
+    .catch(err => {
+      console.log("error deleting user...", err);
+      res.status(500).json({ message: "error deleting user...", error: err });
+    });
 });
 
 module.exports = router;
