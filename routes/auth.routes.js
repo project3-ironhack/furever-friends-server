@@ -177,4 +177,94 @@ router.get("/verify", isAuthenticated, (req, res, next) => {
   res.status(200).json(req.payload);
 });
 
+// Get list of users
+router.get('/signup', (req, res, next) => {
+    User.find()
+    .then(allUsers => {
+        res.json(allUsers);
+    })
+    .catch(err => {
+        console.log("error getting list of users", err);
+        res.status(500).json({message: "error getting list of users", error: err})
+    });
+});
+
+// Retrieve a specific user by id 
+router.get('/:userId', (req, res, next) =>{
+  const { userId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+      res.status(400).json({ message: 'Specified id is not valid' });
+      return;
+  }
+
+  User.findById(userId)
+      .then(user => res.json(user))
+      .catch(err => {
+          console.log("error getting user details...", err);
+          res.status(500).json({
+              message: "error getting user details...",
+              error: err
+          })
+      });
+});
+
+// Update a specific user by id
+router.put('/:userId', (req, res, next) => {
+  const { userId } = req.params;
+  const { type } = req.body;
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+      res.status(400).json({ message: 'Specified id is not valid' });
+      return;
+  }
+
+  if ( type === 'adopter'){
+  Association.findByIdAndUpdate(userId, req.body, { new: true })
+      .then((updatedUser) => {res.json(updatedUser)
+      console.log(updatedUser)
+      })
+      .catch(err => {
+          console.log("error updating association...", err);
+          res.status(500).json({
+              message: "error updating association...",
+              error: err
+          })
+      });
+  }
+
+  if ( type === 'adopter'){
+      Adopter.findByIdAndUpdate(userId, req.body, { new: true })
+          .then((updatedUser) => {res.json(updatedUser)
+          })
+          .catch(err => {
+              console.log("error updating adopter...", err);
+              res.status(500).json({
+                  message: "error updating adopter...",
+                  error: err
+              })
+          });
+      }
+
+});
+
+// Delete a specific user by id
+router.delete('/signup/:userId', (req, res, next) => {
+  const { userId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+      res.status(400).json({ message: 'Specified id is not valid' });
+      return;
+  }
+
+  User.findByIdAndRemove(userId)
+      .then(() => res.json({ message: `Pet with ${userId} is removed successfully.` }))
+      .catch(err => {
+          console.log("error deleting user...", err);
+          res.status(500).json({
+              message: "error deleting user...",
+              error: err
+          })
+      });
+});
+
 module.exports = router;
